@@ -13,7 +13,7 @@ public class ReflectedMethod<R> implements Reflected {
     private final Class<R> type;
     private final Method method;
 
-    private ReflectedMethod(@NotNull Class<R> type, @NotNull Class<?> from, @NotNull String name, ReflectedModifier... modifiers) {
+    public ReflectedMethod(@NotNull Class<R> type, @NotNull Class<?> from, @NotNull String name, ReflectedModifier... modifiers) {
         if (type.isPrimitive())
             throw new IllegalArgumentException("You can not pass a primitive type for reflection");
         try {
@@ -31,24 +31,10 @@ public class ReflectedMethod<R> implements Reflected {
         }
     }
 
-    public boolean testModifier(ReflectedModifier modifier) {
-        return modifier.test(method.getModifiers());
-    }
-
-    public boolean isPublic() {
-        return testModifier(ReflectedModifier.Public);
-    }
-    public boolean isProtected() {
-        return testModifier(ReflectedModifier.Protected);
-    }
-    public boolean isPrivate() {
-        return testModifier(ReflectedModifier.Private);
-    }
-    public boolean isFinal() {
-        return testModifier(ReflectedModifier.Final);
-    }
-    public boolean isStatic() {
-        return testModifier(ReflectedModifier.Static);
+    public void setAccessible() {
+        try {
+            method.setAccessible(true);
+        } catch (Throwable ignored) {}
     }
 
     private Object invokeMethod(Object instance, Object... args) throws InvocationTargetException, IllegalAccessException {

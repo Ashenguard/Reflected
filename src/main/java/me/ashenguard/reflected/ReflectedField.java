@@ -33,8 +33,12 @@ public class ReflectedField<R> implements Reflected {
     private ReflectedField(Field field) {
         this.field = field;
         this.type = (Class<R>) field.getType();
+    }
 
-        if (isPrivate() || isProtected()) field.setAccessible(true);
+    public void setAccessible() {
+        try {
+            field.setAccessible(true);
+        } catch (Throwable ignored) {}
     }
 
     @SuppressWarnings("unchecked")
